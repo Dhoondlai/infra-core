@@ -40,6 +40,7 @@ jobs:
           path: tfplan
 
   ApplyProduction:
+    needs: PlanProduction
     runs-on: ubuntu-latest
     environment: production
     steps:
