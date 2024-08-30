@@ -5,7 +5,7 @@ module "dynamodb_table" {
 
   name      = "products"
   hash_key  = "name"
-  range_key = "cost"
+  range_key = "vendor"
 
   attributes = [
     {
@@ -13,13 +13,8 @@ module "dynamodb_table" {
       type = "S"
     },
     {
-      name = "cost"
+      name = "vendor"
       type = "S"
     }
   ]
-
-  tags = {
-    Terraform   = "true"
-    Environment = "staging"
-  }
 }
