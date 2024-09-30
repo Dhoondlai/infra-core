@@ -21,9 +21,9 @@ resource "aws_instance" "db-instance" {
   instance_type = "t2.micro"
   key_name      = "backend-dhoondlai-key-pair"
 
-  subnet_id                   = aws_subnet.main-public-subnet-1.id
+  subnet_id                   = aws_subnet.main-private-subnet-1.id
   vpc_security_group_ids      = [aws_security_group.main-vpc-web-sg.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   user_data = <<-EOF
   #!/bin/bash -ex
@@ -63,7 +63,12 @@ resource "aws_iam_role" "ec2-iam-role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "ec2-iam-role-policy-attachment" {
+resource "aws_iam_role_policy_attachment" "ec2-iam-ssm" {
   role       = aws_iam_role.ec2-iam-role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2-iam-instance-profile" {
+  name = "ec2-iam-instance-profile"
+  role = aws_iam_role.ec2-iam-role.name
 }
