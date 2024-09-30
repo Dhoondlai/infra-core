@@ -5,7 +5,7 @@ resource "tls_private_key" "db-private-key" {
 
 resource "aws_key_pair" "db-key-pair" {
   key_name   = "backend-dhoondlai-key-pair"
-  public_key = tls_private_key.backend-dhoondlai-private-key.public_key_openssh
+  public_key = tls_private_key.db-private-key.public_key_openssh
 }
 
 data "aws_ami" "mongodb-ubuntu" {
@@ -27,8 +27,12 @@ resource "aws_instance" "db-instance" {
 
   user_data = <<-EOF
   #!/bin/bash -ex
-  apt-get update -y
-  apt-get install -y nginx
+  PUBLIC_DNS=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+  echo "Public DNS is: $PUBLIC_DNS"
+  cp /etc/mongod.conf /etc/mongod.conf.backup
+  sed -i "s/^  bindIp:.*$/  bindIp: $PUBLIC_DNS/" /etc/mongod.conf
+  sudo systemctl restart mongod
+
   EOF
 
   iam_instance_profile = aws_iam_instance_profile.ec2-iam-instance-profile.name
