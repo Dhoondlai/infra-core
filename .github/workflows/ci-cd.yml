@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   PlanProduction:
@@ -41,6 +44,7 @@ jobs:
 
   ApplyProduction:
     needs: PlanProduction
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     steps:
