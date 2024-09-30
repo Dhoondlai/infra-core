@@ -38,7 +38,7 @@ resource "aws_instance" "db-instance" {
   iam_instance_profile = aws_iam_instance_profile.ec2-iam-instance-profile.name
 
   tags = {
-    Name = "backend-parhlai-instance"
+    Name = "dhoondlai-db-instance"
   }
 }
 
