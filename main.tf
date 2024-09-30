@@ -46,7 +46,34 @@ resource "aws_route_table_association" "public_1_rt_a" {
 
 # Security group
 
-resource "aws_security_group" "main-vpc-web-sg" {
-  name   = "main-vpc-web-sg"
+resource "aws_security_group" "db-ec2" {
+  name   = "db-ec2"
   vpc_id = aws_vpc.main-vpc.id
+}
+
+resource "aws_security_group_rule" "db-ec2-ingress" {
+  type              = "ingress"
+  from_port         = 27017
+  to_port           = 27017
+  protocol          = "tcp"
+  security_group_id = aws_security_group.db-ec2.id
+  self              = true
+}
+
+resource "aws_security_group_rule" "db-ec2-ssh-ingress" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.db-ec2.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "db-ec2-egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.db-ec2.id
+  cidr_blocks       = ["0.0.0.0/0"]
 }

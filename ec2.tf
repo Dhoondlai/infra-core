@@ -16,14 +16,19 @@ data "aws_ami" "mongodb-ubuntu" {
   }
 }
 
+# we can't use a private subnet. As we will have to :
+# 1- Attach a NAT in order to use SSM
+# 2- Use a bastion host if not using SSM
+# Both of these options are too much cost for us.
+
 resource "aws_instance" "db-instance" {
   ami           = data.aws_ami.mongodb-ubuntu.id
   instance_type = "t2.micro"
   key_name      = "backend-dhoondlai-key-pair"
 
-  subnet_id                   = aws_subnet.main-private-subnet-1.id
-  vpc_security_group_ids      = [aws_security_group.main-vpc-web-sg.id]
-  associate_public_ip_address = false
+  subnet_id                   = aws_subnet.main-public-subnet-1.id
+  vpc_security_group_ids      = [aws_security_group.db-ec2.id]
+  associate_public_ip_address = true
 
   user_data = <<-EOF
   #!/bin/bash -ex
@@ -61,9 +66,4 @@ resource "aws_iam_role" "ec2-iam-role" {
       }
     ]
   })
-}
-
-resource "aws_iam_role_policy_attachment" "ec2-iam-ssm" {
-  role       = aws_iam_role.ec2-iam-role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
