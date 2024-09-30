@@ -58,7 +58,7 @@ resource "aws_security_group_rule" "db-ec2-ingress" {
   to_port           = 27017
   protocol          = "tcp"
   security_group_id = aws_security_group.db-ec2.id
-  self              = true
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "db-ec2-ssh-ingress" {

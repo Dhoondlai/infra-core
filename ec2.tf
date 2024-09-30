@@ -35,7 +35,7 @@ resource "aws_instance" "db-instance" {
   PUBLIC_DNS=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
   echo "Public DNS is: $PUBLIC_DNS"
   cp /etc/mongod.conf /etc/mongod.conf.backup
-  sed -i "s/^  bindIp:.*$/  bindIp: $PUBLIC_DNS/" /etc/mongod.conf
+  sed -i "s/^  bindIp:.*$/  bindIp: 0.0.0.0/" /etc/mongod.conf
   sudo systemctl restart mongod
 
   EOF
