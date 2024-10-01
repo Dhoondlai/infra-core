@@ -21,6 +21,9 @@ data "aws_ami" "mongodb-ubuntu" {
 # 2- Use a bastion host if not using SSM
 # Both of these options are too much cost for us.
 
+# See : https://github.com/Dhoondlai/mongodb-ami documentation for next steps after ec2 creation
+# to setup the mongodb instance with authentication.
+
 resource "aws_instance" "db-instance" {
   ami           = data.aws_ami.mongodb-ubuntu.id
   instance_type = "t2.micro"
@@ -32,12 +35,9 @@ resource "aws_instance" "db-instance" {
 
   user_data = <<-EOF
   #!/bin/bash -ex
-  PUBLIC_DNS=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
-  echo "Public DNS is: $PUBLIC_DNS"
   cp /etc/mongod.conf /etc/mongod.conf.backup
   sed -i "s/^  bindIp:.*$/  bindIp: 0.0.0.0/" /etc/mongod.conf
   sudo systemctl restart mongod
-
   EOF
 
   iam_instance_profile = aws_iam_instance_profile.ec2-iam-instance-profile.name
