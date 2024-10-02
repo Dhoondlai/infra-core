@@ -40,7 +40,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan
+          path: |
+            code.zip
+            tfplan
 
   ApplyProduction:
     needs: PlanProduction
@@ -67,9 +69,10 @@ jobs:
 
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
-        with:
-          name: tfplan
 
-      - name: Terraform apply
-        run: |
-          terraform apply -auto-approve tfplan
+      - run: ls
+      - run: ls -R
+
+      # - name: Terraform apply
+      #   run: |
+      #     terraform apply -auto-approve tfplan
