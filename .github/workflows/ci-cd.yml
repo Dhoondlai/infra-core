@@ -72,7 +72,7 @@ jobs:
 
       - name: Move files from .upload directory to root
         run: |
-          mv ./upload/tfplan ./uppload/code.zip ./
+          mv ./upload/tfplan ./upload/code.zip ./
 
       - name: Terraform apply
         run: |
