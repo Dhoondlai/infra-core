@@ -70,9 +70,10 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
 
-      - run: ls
-      - run: ls -R
+      - name: Move files from .tfplan directory to root
+        run: |
+          mv ./tfplan/tfplan ./tfplan/code.zip ./
 
-      # - name: Terraform apply
-      #   run: |
-      #     terraform apply -auto-approve tfplan
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve tfplan
