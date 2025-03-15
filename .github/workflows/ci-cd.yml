@@ -7,6 +7,10 @@ on:
     branches:
       - main
 
+env:
+  MONGODB_ATLAS_PUBLIC_API_KEY: ${{ secrets.MONGODBATLAS_PUBLIC_KEY }}
+  MONGODB_ATLAS_PRIVATE_API_KEY: ${{ secrets.MONGODBATLAS_PRIVATE_KEY }}
+
 jobs:
   PlanProduction:
     runs-on: ubuntu-latest
@@ -38,8 +42,8 @@ jobs:
           -var="cloudflare_account_email"=${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }} \
           -var="cloudflare_main_zone_id=${{ secrets.CLOUDFLARE_ZONE_ID }}" \
           -var="cloudflare_account_id=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" \
-          -var="mongodbatlas_public_key=${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}" \
-          -var="mongodbatlas_private_key=${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}" \
+          -var="mongodbatlas_public_key=${{ secrets.MONGODBATLAS_PUBLIC_KEY }}" \
+          -var="mongodbatlas_private_key=${{ secrets.MONGODBATLAS_PRIVATE_KEY }}" \
           -no-color -out tfplan
 
       - name: Publish Terraform Plan
