@@ -87,11 +87,4 @@ jobs:
 
       - name: Terraform apply
         run: |
-          terraform apply \
-          -var="cloudflare_api_key=${{ secrets.CLOUDFLARE_API_KEY }}" \
-          -var="cloudflare_account_email"=${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }} \
-          -var="cloudflare_zone_id=${{ secrets.CLOUDFLARE_ZONE_ID }}" \
-          -var="cloudflare_account_id=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" \
-          -var="mongodbatlas_public_key=${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}" \
-          -var="mongodbatlas_private_key=${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}" \
-          -auto-approve tfplan
+          terraform apply -auto-approve tfplan
