@@ -13,6 +13,44 @@ data "archive_file" "dummy_zip" {
   }
 }
 
+resource "aws_iam_role" "backend_lambda_role" {
+  name = "BackendLambdaRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com" # Allow Lambda to assume the role
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "ssm_access_policy" {
+  name        = "SSMAccessPolicy"
+  description = "Policy that allows access to AWS SSM"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath",
+          "ssm:DescribeParameters",
+          "ssm:LabelParameter",
+          "ssm:GetParameterHistory"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 module "backend-dhoondlai" {
   source = "terraform-aws-modules/lambda/aws"
 
@@ -24,6 +62,5 @@ module "backend-dhoondlai" {
   authorization_type         = "AWS_IAM"
   create_package             = false
   local_existing_package     = "code.zip"
-
-  ignore_source_code_hash = true
+  ignore_source_code_hash    = true
 }
