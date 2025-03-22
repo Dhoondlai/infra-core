@@ -24,8 +24,8 @@ jobs:
 
       - name: Create Lambda Layer
         run: |
-          chmod +x create_lambda_layer.sh
-          ./create_lambda_layer.sh
+          chmod +x create_layer.sh
+          ./create_layer.sh
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
