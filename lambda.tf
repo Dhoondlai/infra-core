@@ -29,6 +29,23 @@ resource "aws_iam_role" "backend_lambda_role" {
   })
 }
 
+
+resource "aws_iam_role" "scraper_lambda_role" {
+  name = "ScraperLambdaRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com" # Allow Lambda to assume the role
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_policy" "ssm_access_policy" {
   name        = "SSMAccessPolicy"
   description = "Policy that allows access to AWS SSM"
@@ -51,6 +68,27 @@ resource "aws_iam_policy" "ssm_access_policy" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "ssm_access_policy_attachment_backend" {
+  role       = aws_iam_role.backend_lambda_role.name
+  policy_arn = aws_iam_policy.ssm_access_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_access_policy_attachment_scraper" {
+  role       = aws_iam_role.scraper_lambda_role.name
+  policy_arn = aws_iam_policy.ssm_access_policy.arn
+}
+
+# Attach AWSLambdaBasicExecutionRole managed policy to the role (for CloudWatch logging)
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution_backend" {
+  role       = aws_iam_role.backend_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution_scraper" {
+  role       = aws_iam_role.scraper_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 module "backend-dhoondlai" {
   source = "terraform-aws-modules/lambda/aws"
 
@@ -63,6 +101,9 @@ module "backend-dhoondlai" {
   create_package             = false
   local_existing_package     = "code.zip"
   ignore_source_code_hash    = true
+
+  create_role = false
+  lambda_role = aws_iam_role.backend_lambda_role.arn
 }
 
 
@@ -80,6 +121,9 @@ module "techmatched" {
   layers = [
     aws_lambda_layer_version.scraper_layer.arn
   ]
+
+  create_role = false
+  lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
 module "junaidtech" {
@@ -95,6 +139,9 @@ module "junaidtech" {
   layers = [
     aws_lambda_layer_version.scraper_layer.arn
   ]
+
+  create_role = false
+  lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
 # lambda layer for scraper libraries (e.g bs4)
