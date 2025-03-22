@@ -77,11 +77,24 @@ module "techmatched" {
   create_package          = false
   local_existing_package  = "code.zip"
   ignore_source_code_hash = true
-
   layers = [
     aws_lambda_layer_version.scraper_layer.arn
   ]
+}
 
+module "junaidtech" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name           = "junaidtech-scraper"
+  description             = "JunaidTech Scraper"
+  handler                 = "junaidtech.run"
+  runtime                 = "python3.12"
+  create_package          = false
+  local_existing_package  = "code.zip"
+  ignore_source_code_hash = true
+  layers = [
+    aws_lambda_layer_version.scraper_layer.arn
+  ]
 }
 
 # lambda layer for scraper libraries (e.g bs4)
