@@ -121,6 +121,8 @@ module "techmatched" {
   layers = [
     aws_lambda_layer_version.scraper_layer.arn
   ]
+  cloudwatch_logs_retention_in_days = 1
+  timeout                           = 900
 
   create_role = false
   lambda_role = aws_iam_role.scraper_lambda_role.arn
@@ -139,6 +141,9 @@ module "junaidtech" {
   layers = [
     aws_lambda_layer_version.scraper_layer.arn
   ]
+  cloudwatch_logs_retention_in_days = 1
+  timeout                           = 900
+
 
   create_role = false
   lambda_role = aws_iam_role.scraper_lambda_role.arn
