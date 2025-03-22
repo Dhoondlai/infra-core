@@ -98,7 +98,7 @@ module "junaidtech" {
 }
 
 # lambda layer for scraper libraries (e.g bs4)
-# layer content created via GitHub Actions.
+# layer content created via create_layer.sh script.
 
 resource "aws_lambda_layer_version" "scraper_layer" {
   filename   = "scraper_layer_content.zip"

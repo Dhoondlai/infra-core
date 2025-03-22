@@ -6,3 +6,6 @@ pip install pymongo
 mkdir python
 cp -r create_layer/lib python/
 zip -r scraper_layer_content.zip python
+rm -rf create_layer
+rm -rf python
+deactivate

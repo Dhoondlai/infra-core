@@ -22,11 +22,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Create Lambda Layer
-        run: |
-          chmod +x create_layer.sh
-          ./create_layer.sh
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
