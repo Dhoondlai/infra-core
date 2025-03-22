@@ -77,17 +77,21 @@ module "techmatched" {
   create_package          = false
   local_existing_package  = "code.zip"
   ignore_source_code_hash = true
+
+  layers = [
+    aws_lambda_layer_version.scraper_layer.arn
+  ]
+
 }
 
+# lambda layer for scraper libraries (e.g bs4)
+# layer content created via GitHub Actions.
 
-# lambda layer for libraries (e.g bs4)
-# layer uploaded via GitHub Actions.
-
-resource "aws_lambda_layer_version" "bs4" {
-  filename   = "layer_content.zip"
-  layer_name = "bs4"
+resource "aws_lambda_layer_version" "scraper_layer" {
+  filename   = "scraper_layer_content.zip"
+  layer_name = "scraper_layer"
   compatible_runtimes = [
     "python3.12"
   ]
-  source_code_hash = filebase64sha256("layer_content.zip")
+  source_code_hash = filebase64sha256("scraper_layer_content.zip")
 }

@@ -5,4 +5,4 @@ pip install requests
 pip install pymongo
 mkdir python
 cp -r create_layer/lib python/
-zip -r layer_content.zip python
+zip -r scraper_layer_content.zip python
