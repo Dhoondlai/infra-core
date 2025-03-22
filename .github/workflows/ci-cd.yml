@@ -63,7 +63,7 @@ jobs:
           path: |
             code.zip
             tfplan
-            layer_content.zip
+            scraper_layer_content.zip
 
   ApplyProduction:
     needs: PlanProduction
