@@ -64,3 +64,30 @@ module "backend-dhoondlai" {
   local_existing_package     = "code.zip"
   ignore_source_code_hash    = true
 }
+
+
+# scrapers
+module "techmatched" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name           = "techmatched-scraper"
+  description             = "Techmatched Scraper"
+  handler                 = "techmatched.run"
+  runtime                 = "python3.12"
+  create_package          = false
+  local_existing_package  = "code.zip"
+  ignore_source_code_hash = true
+}
+
+
+# lambda layer for libraries (e.g bs4)
+# layer uploaded via GitHub Actions.
+
+resource "aws_lambda_layer_version" "bs4" {
+  filename   = "layer_content.zip"
+  layer_name = "bs4"
+  compatible_runtimes = [
+    "python3.12"
+  ]
+  source_code_hash = filebase64sha256("layer_content.zip")
+}

@@ -1,0 +1,8 @@
+python3 -m venv create_layer
+source create_layer/bin/activate
+pip install beautifulsoup4
+pip install requests
+pip install pymongo
+mkdir python
+cp -r create_layer/lib python/
+zip -r layer_content.zip python
