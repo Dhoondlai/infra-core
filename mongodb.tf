@@ -39,3 +39,15 @@ resource "mongodbatlas_database_user" "dhoondlai_db_user" {
     database_name = "admin"
   }
 }
+
+resource "mongodbatlas_database_user" "dhoondlai_db_scraper_user" {
+  project_id         = mongodbatlas_project.dhoondlai.id
+  auth_database_name = "$external"
+  username           = aws_iam_role.scraper_lambda_role.arn
+  aws_iam_type       = "ROLE"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = "dhoondlai"
+  }
+}
