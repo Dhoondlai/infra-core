@@ -3,7 +3,7 @@ source create_layer/bin/activate
 pip install beautifulsoup4
 pip install requests
 pip install pymongo
-pip install pymongo[aws]
+pip install 'pymongo[aws]'
 mkdir python
 cp -r create_layer/lib python/
 zip -r scraper_layer_content.zip python
