@@ -36,5 +36,5 @@ provider "mongodbatlas" {
 
 provider "cloudflare" {
   api_key = var.cloudflare_api_key
-  email   = "parhlai.dev@gmail.com"
+  email   = "dhoondlai@gmail.com"
 }

@@ -31,7 +31,7 @@ variable "cloudflare_account_id" {
 variable "cloudflare_main_zone_id" {
   description = "Cloudflare main zone ID"
   type        = string
-  sensitive   = true
+  sensitive   = false
 }
 
 variable "mongodbatlas_public_key" {
