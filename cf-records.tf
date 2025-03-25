@@ -1,5 +1,5 @@
 resource "cloudflare_record" "dhoondlai" {
-  content = "dhoondlai.pages.dev"
+  content = "dhoondlai-frontend.pages.dev"
   name    = "dhoondlai.com"
   proxied = true
   ttl     = 1
@@ -9,7 +9,7 @@ resource "cloudflare_record" "dhoondlai" {
 }
 
 resource "cloudflare_record" "www_dhoondlai" {
-  content = "dhoondlai.pages.dev"
+  content = "dhoondlai-frontend.pages.dev"
   name    = "www.dhoondlai.com"
   proxied = true
   ttl     = 1
