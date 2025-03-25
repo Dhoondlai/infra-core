@@ -33,6 +33,6 @@ resource "cloudflare_pages_project" "dhoondlai" {
 
 resource "cloudflare_pages_domain" "dhoondlai" {
   account_id   = var.cloudflare_account_id
-  project_name = resource.cloudflare_pages_project.dhoondlai[0].name
+  project_name = resource.cloudflare_pages_project.dhoondlai.name
   domain       = "dhoondlai.com"
 }
