@@ -11,6 +11,7 @@ pip install beautifulsoup4
 pip install requests
 pip install pymongo
 pip install pymongo-auth-aws
+pip install pylcs
 
 # Create the python directory
 mkdir python
