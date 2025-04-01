@@ -149,6 +149,27 @@ module "junaidtech" {
   lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
+module "rbtechngames" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name           = "rbtechngames-scraper"
+  description             = "RB Tech N Games Scraper"
+  handler                 = "rbtechngames.run"
+  runtime                 = "python3.12"
+  create_package          = false
+  local_existing_package  = "code.zip"
+  ignore_source_code_hash = true
+  layers = [
+    aws_lambda_layer_version.scraper_layer.arn
+  ]
+  cloudwatch_logs_retention_in_days = 1
+  timeout                           = 900
+
+
+  create_role = false
+  lambda_role = aws_iam_role.scraper_lambda_role.arn
+}
+
 # lambda layer for scraper libraries (e.g bs4)
 # layer content created via create_layer.sh script.
 
