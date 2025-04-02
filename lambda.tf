@@ -1,4 +1,3 @@
-
 # Dummy file to act as a placeholder.
 # All changes to the lambda function will be done in their separate repos.
 # Only infra is managed here, nothing else.
@@ -170,14 +169,41 @@ module "rbtechngames" {
   lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
-# lambda layer for scraper libraries (e.g bs4)
-# layer content created via create_layer.sh script.
+module "db_updator" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name           = "db-updator"
+  description             = "Function to update product names in database based on longest common substring."
+  handler                 = "dbupdator.run"
+  runtime                 = "python3.12"
+  create_package          = false
+  local_existing_package  = "code.zip"
+  ignore_source_code_hash = true
+  layers = [
+    aws_lambda_layer_version.db_updator_layer.arn
+  ]
+  cloudwatch_logs_retention_in_days = 1
+  timeout                           = 900
+
+
+  create_role = false
+  lambda_role = aws_iam_role.scraper_lambda_role.arn
+}
 
 resource "aws_lambda_layer_version" "scraper_layer" {
-  filename   = "scraper_layer_content.zip"
+  filename   = "lambda_layers/scraper_layer_content.zip"
   layer_name = "scraper_layer"
   compatible_runtimes = [
     "python3.12"
   ]
-  source_code_hash = filebase64sha256("scraper_layer_content.zip")
+  source_code_hash = filebase64sha256("lambda_layers/scraper_layer_content.zip")
+}
+
+resource "aws_lambda_layer_version" "db_updator_layer" {
+  filename   = "lambda_layers/db_updator_layer_content.zip"
+  layer_name = "db_updator_layer"
+  compatible_runtimes = [
+    "python3.12"
+  ]
+  source_code_hash = filebase64sha256("lambda_layers/db_updator_layer_content.zip")
 }

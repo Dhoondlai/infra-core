@@ -20,7 +20,9 @@ mkdir python
 cp -r create_layer/lib/python* python/
 
 # Zip the contents of the python directory
-zip -r scraper_layer_content.zip python
+zip -9 -q -r scraper_layer_content.zip python
+
+rm -rf python
 
 # Deactivate the virtual environment
 deactivate
