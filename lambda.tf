@@ -169,6 +169,23 @@ module "rbtechngames" {
   lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
+module "buyerspk" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name           = "buyerspk-scraper"
+  description             = "Buyerspk Scraper"
+  handler                 = "buyerspk.run"
+  runtime                 = "python3.12"
+  create_package          = false
+  local_existing_package  = "code.zip"
+  ignore_source_code_hash = true
+  layers = [
+    aws_lambda_layer_version.scraper_layer.arn
+  ]
+  cloudwatch_logs_retention_in_days = 1
+  timeout                           = 900
+}
+
 module "db_updator" {
   source = "terraform-aws-modules/lambda/aws"
 
@@ -189,6 +206,8 @@ module "db_updator" {
   create_role = false
   lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
+
+# lambda layers
 
 resource "aws_lambda_layer_version" "scraper_layer" {
   filename   = "lambda_layers/scraper_layer_content.zip"
