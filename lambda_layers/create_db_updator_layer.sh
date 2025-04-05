@@ -7,7 +7,7 @@ python3 -m venv create_db_updator_layer
 source create_db_updator_layer/bin/activate
 
 # Install the pylcs package
-pip install pylcs
+pip install groq
 pip install pymongo
 pip install pymongo-auth-aws
 
