@@ -229,25 +229,25 @@ module "walistech" {
   lambda_role = aws_iam_role.scraper_lambda_role.arn
 }
 
-module "connect2aryans" {
-  source = "terraform-aws-modules/lambda/aws"
+# module "connect2aryans" {
+#   source = "terraform-aws-modules/lambda/aws"
 
-  function_name           = "connect2aryans-scraper"
-  description             = "Connect2Aryans Scraper"
-  handler                 = "connect2aryans.run"
-  runtime                 = "python3.12"
-  create_package          = false
-  local_existing_package  = "code.zip"
-  ignore_source_code_hash = true
-  layers = [
-    aws_lambda_layer_version.scraper_layer.arn
-  ]
-  cloudwatch_logs_retention_in_days = 1
-  timeout                           = 900
+#   function_name           = "connect2aryans-scraper"
+#   description             = "Connect2Aryans Scraper"
+#   handler                 = "connect2aryans.run"
+#   runtime                 = "python3.12"
+#   create_package          = false
+#   local_existing_package  = "code.zip"
+#   ignore_source_code_hash = true
+#   layers = [
+#     aws_lambda_layer_version.scraper_layer.arn
+#   ]
+#   cloudwatch_logs_retention_in_days = 1
+#   timeout                           = 900
 
-  create_role = false
-  lambda_role = aws_iam_role.scraper_lambda_role.arn
-}
+#   create_role = false
+#   lambda_role = aws_iam_role.scraper_lambda_role.arn
+# }
 
 module "db_updator" {
   source = "terraform-aws-modules/lambda/aws"
