@@ -91,18 +91,27 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution_scraper" {
 module "backend-dhoondlai" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name              = "backend-dhoondlai"
-  description                = "Backend for Dhoondlai app. Express Monolith."
-  handler                    = "dist/server.handler"
-  runtime                    = "nodejs20.x"
-  create_lambda_function_url = true
-  authorization_type         = "AWS_IAM"
-  create_package             = false
-  local_existing_package     = "code.zip"
-  ignore_source_code_hash    = true
+  function_name                     = "backend-dhoondlai"
+  description                       = "Backend for Dhoondlai app. Express Monolith."
+  handler                           = "dist/server.handler"
+  runtime                           = "nodejs20.x"
+  create_lambda_function_url        = true
+  authorization_type                = "AWS_IAM"
+  create_package                    = false
+  local_existing_package            = "code.zip"
+  ignore_source_code_hash           = true
+  cloudwatch_logs_retention_in_days = 3
 
   create_role = false
   lambda_role = aws_iam_role.backend_lambda_role.arn
+
+  cors = {
+    allow_headers  = ["*"]
+    allow_methods  = ["GET", "POST", "PATCH", "DELETE"]
+    expose_headers = ["*"]
+    allow_origins  = ["https://dhoondlai.com"]
+  }
+
 }
 
 
