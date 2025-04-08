@@ -32,10 +32,10 @@ resource "cloudflare_record" "dhoondlai_api" {
 
 resource "cloudflare_record" "acm_validation_cloudfront" {
   comment = "Domain validation for ACM certificate to route api.dhoondlai.com to Cloudfront"
-  content = one(resource.aws_acm_certificate.parhlai_cert_cloudfront.domain_validation_options).resource_record_value
-  name    = one(resource.aws_acm_certificate.parhlai_cert_cloudfront.domain_validation_options).resource_record_name
+  content = one(resource.aws_acm_certificate.dhoondlai_cert_cloudfront.domain_validation_options).resource_record_value
+  name    = one(resource.aws_acm_certificate.dhoondlai_cert_cloudfront.domain_validation_options).resource_record_name
   proxied = false
-  type    = one(resource.aws_acm_certificate.parhlai_cert_cloudfront.domain_validation_options).resource_record_type
-  zone_id = var.cloudflare_main_zone_id #parhlai.com zone
+  type    = one(resource.aws_acm_certificate.dhoondlai_cert_cloudfront.domain_validation_options).resource_record_type
+  zone_id = var.cloudflare_main_zone_id
 }
 

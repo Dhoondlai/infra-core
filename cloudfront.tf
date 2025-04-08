@@ -64,12 +64,11 @@ module "cdn_backend" {
     }
   ]
 
-  # Viewer certificate - HTTPS
-  # viewer_certificate = {
-  #   acm_certificate_arn      = resource.aws_acm_certificate.parhlai_cert_cloudfront.arn
-  #   ssl_support_method       = "sni-only"
-  #   minimum_protocol_version = "TLSv1"
-  # }
+  viewer_certificate = {
+    acm_certificate_arn      = resource.aws_acm_certificate.dhoondlai_cert_cloudfront.arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1"
+  }
 }
 
 resource "aws_cloudfront_origin_access_control" "lambda_backend" {
