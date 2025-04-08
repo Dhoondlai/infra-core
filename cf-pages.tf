@@ -21,12 +21,16 @@ resource "cloudflare_pages_project" "dhoondlai" {
     destination_dir = "dist"
   }
 
+
   deployment_configs {
     preview {
       compatibility_flags = ["nodejs_compat"]
     }
     production {
       compatibility_flags = ["nodejs_compat"]
+      environment_variables = {
+        "VITE_API_URL" = "https://api.dhoondlai.com",
+      }
     }
   }
 }
