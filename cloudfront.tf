@@ -12,6 +12,8 @@ module "cdn_backend" {
   enabled = true
   comment = "Dhoondlai Backend CDN"
 
+  aliases = ["api.dhoondlai.com"]
+
   default_root_object = "index.html"
   default_cache_behavior = {
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
