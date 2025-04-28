@@ -85,7 +85,7 @@ def run(event, context):
 
         try:
             response = groq_client.chat.completions.create(
-                model="qwen-2.5-32b",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "system",
                         "content": "You are a product name standardization assistant."},
