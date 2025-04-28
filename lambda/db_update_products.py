@@ -6,14 +6,18 @@ import os
 import boto3
 
 if os.environ.get("IS_LOCAL"):
-    print("Using local key.")
+    print("Using local key and local mongodb.")
     groq_api_key = os.environ.get("GROQ_API_KEY")
+    client = pymongo.MongoClient("mongodb://localhost:27017/")
 else:
 
     # fetch from parameter store
     ssm = boto3.client('ssm', region_name='us-east-1')
     response = ssm.get_parameter(Name='groq-api-key', WithDecryption=True)
+    mongodb_uri =  ssm.get_parameter(Name='mongo-uri', WithDecryption=True)
     groq_api_key = response['Parameter']['Value']
+    uri = mongodb_uri['Parameter']['Value']
+    client = pymongo.MongoClient(uri)
 
 # Rename the Groq client to avoid variable name collision
 groq_client = Groq(
@@ -23,7 +27,6 @@ groq_client = Groq(
 
 def run(event, context):
     # Connect to MongoDB
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
     db = client.dhoondlai
     products = db.products
 
