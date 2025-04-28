@@ -112,6 +112,10 @@ module "backend-dhoondlai" {
     allow_origins  = ["https://dhoondlai.com"]
   }
 
+  environment_variables = {
+    ENVIRONMENT = "production"
+  }
+
 }
 
 
