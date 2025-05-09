@@ -266,8 +266,8 @@ module "db_updator" {
   source = "terraform-aws-modules/lambda/aws"
 
   function_name           = "db-updator"
-  description             = "Function to update product names in database based on longest common substring."
-  handler                 = "dbupdator.run"
+  description             = "Function to standardize product names in database."
+  handler                 = "db_update_products.run.run"
   runtime                 = "python3.12"
   create_package          = false
   local_existing_package  = "code.zip"
@@ -276,7 +276,7 @@ module "db_updator" {
     aws_lambda_layer_version.db_updator_layer.arn
   ]
   cloudwatch_logs_retention_in_days = 1
-  timeout                           = 900
+  timeout                           = 60
 
 
   create_role = false
