@@ -265,12 +265,11 @@ module "walistech" {
 module "db_updator" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name  = "db-updator"
-  description    = "Function to standardize product names in database."
-  handler        = "db_update_products.run"
-  runtime        = "python3.12"
-  create_package = false
-  source_path    = "lambda/db_update_products.py"
+  function_name = "db-updator"
+  description   = "Function to standardize product names in database."
+  handler       = "db_update_products.run"
+  runtime       = "python3.12"
+  source_path   = "lambda/db_update_products.py"
   layers = [
     aws_lambda_layer_version.db_updator_layer.arn
   ]
