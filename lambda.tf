@@ -101,6 +101,8 @@ module "backend-dhoondlai" {
   local_existing_package            = "code.zip"
   ignore_source_code_hash           = true
   cloudwatch_logs_retention_in_days = 1
+  timeout                           = 8
+
 
   create_role = false
   lambda_role = aws_iam_role.backend_lambda_role.arn
@@ -109,7 +111,8 @@ module "backend-dhoondlai" {
     allow_headers  = ["*"]
     allow_methods  = ["GET", "POST", "PATCH", "DELETE"]
     expose_headers = ["*"]
-    allow_origins  = ["https://dhoondlai.com"]
+    #allow_origins  = ["https://dhoondlai.com"]
+    allow_origins = ["*"] // need fix
   }
 
   environment_variables = {
