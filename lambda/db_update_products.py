@@ -52,7 +52,6 @@ def run(event, context):
     updated_count = 0
     skipped_count = 0
 
-    # Process all products in batches
     for i in range(0, len(all_products), batch_size):
         batch = all_products[i:i+batch_size]
 
