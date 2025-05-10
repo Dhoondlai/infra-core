@@ -111,8 +111,7 @@ module "backend-dhoondlai" {
     allow_headers  = ["*"]
     allow_methods  = ["GET", "POST", "PATCH", "DELETE"]
     expose_headers = ["*"]
-    #allow_origins  = ["https://dhoondlai.com"]
-    allow_origins = ["*"] // need fix
+    allow_origins  = ["https://dhoondlai.com"]
   }
 
   environment_variables = {
