@@ -14,7 +14,7 @@ else:
     # fetch from parameter store
     ssm = boto3.client('ssm', region_name='us-east-1')
     response = ssm.get_parameter(Name='groq-api-key', WithDecryption=True)
-    mongodb_uri =  ssm.get_parameter(Name='mongo-uri', WithDecryption=True)
+    mongodb_uri = ssm.get_parameter(Name='mongo-uri', WithDecryption=True)
     groq_api_key = response['Parameter']['Value']
     uri = mongodb_uri['Parameter']['Value']
     client = pymongo.MongoClient(uri)
@@ -48,7 +48,7 @@ def run(event, context):
     print(f"\nFound {len(all_products)} products in category '{category}'\n")
 
     # Process products in batches to avoid overloading
-    batch_size = 20
+    batch_size = 15
     updated_count = 0
     skipped_count = 0
 
