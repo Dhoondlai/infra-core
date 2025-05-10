@@ -100,7 +100,7 @@ module "backend-dhoondlai" {
   create_package                    = false
   local_existing_package            = "code.zip"
   ignore_source_code_hash           = true
-  cloudwatch_logs_retention_in_days = 3
+  cloudwatch_logs_retention_in_days = 1
 
   create_role = false
   lambda_role = aws_iam_role.backend_lambda_role.arn
