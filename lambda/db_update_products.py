@@ -39,7 +39,8 @@ def run(event, context):
         }
 
     # Fetch all products in the category
-    all_products = list(products.find({"category": category}))
+    all_products = list(products.find(
+        {"category": category, "available": True}))
     if not all_products:
         return {
             'statusCode': 404,
@@ -65,7 +66,7 @@ def run(event, context):
         product_list_text = "\n".join(
             [f"{idx+1}. \"{p['name']}\"" for idx, p in enumerate(valid_products)])
 
-        prompt = f"""
+        prompt_cpu = f"""
         Extract the standard base model names from these PC parts. Numbered list format:
 
         {product_list_text}
@@ -76,6 +77,7 @@ def run(event, context):
         3. Remove packaging info like "Tray", "Used"
         4. Remove parentheses and their contents
         5. You can change the order of words if needed (e.g, Intel Core 12th Gen i3 12100F -> Intel Core i3 12100F)
+        7. Everything should be in Title Case (e.g., "intel core i3 12100f" -> "Intel Core i3 12100F")
         
         Return your answer in this exact format with one standardized name per line:
         1. [standardized name 1]
@@ -85,7 +87,30 @@ def run(event, context):
         Include ONLY the numbered list, nothing else.
         """
 
+        prompt_gpu = f"""
+        Extract the standard base model names from these PC parts. Numbered list format:
+        {product_list_text}
+        Rules:
+        1. Remove marketing phrases like "Buy", "Graphics Card", "GPU", "Video Card" etc.
+        2. Keep the core product identifiers (e.g., "Nvidia GeForce RTX 3060")
+        3. Remove packaging info like "Tray", "Used"
+        4. Remove parentheses and their contents
+        5. You can change the order of words if needed (e.g, ASUS NVIDIA GeForce RTX 3060 8GB Graphics Card-> Nvidia GeForce RTX 3060 8GB)
+        6. The product should not contain the AIB (Add-in Board) names (like Asus, MSI, etc), only the GPU model.
+        7. Everything should be in Title Case (e.g., "Nvidia GeForce RTX 3060" not "nvidia geforce rtx 3060")
+        Return your answer in this exact format with one standardized name per line:
+        1. [standardized name 1]
+        2. [standardized name 2]
+        ... and so on
+        Include ONLY the numbered list, nothing else.
+        """
+
         try:
+            if category.lower() == "processor":
+                prompt = prompt_cpu
+            elif category.lower() == "gpu":
+                prompt = prompt_gpu
+
             response = groq_client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[
@@ -136,6 +161,14 @@ def run(event, context):
             else:
                 print(
                     f"Error: Received {len(standard_names)} standard names for {len(valid_products)} products")
+                print(f"Valid products in this batch:")
+                for idx, product in enumerate(valid_products):
+                    print(f"  {idx+1}. {product['name']}")
+                print(f"Standard names received:")
+                for idx, name in enumerate(standard_names):
+                    print(f"  {idx+1}. {name}")
+                print(f"Raw LLM response:")
+                print(f"'{standard_names_text}'")
                 skipped_count += len(valid_products)
 
         except Exception as e:
